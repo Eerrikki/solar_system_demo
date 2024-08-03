@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://bhvyrowenems1"
+path="res://.godot/imported/8k_moon.jpg-cb8215ac476230d09769dfa4111ecc32.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/8k_moon.jpg"
+dest_files=["res://.godot/imported/8k_moon.jpg-cb8215ac476230d09769dfa4111ecc32.image"]
+
+[params]
+

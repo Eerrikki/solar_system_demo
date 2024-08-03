@@ -77,10 +77,6 @@ func _try_exit_ship():
 		print("Still moving")
 		return
 	var stellar_body : StellarBody = ship.get_solar_system().get_reference_stellar_body()
-	if stellar_body.type != StellarBody.TYPE_ROCKY:
-		# Can't walk on this
-		print("Can't walk on this")
-		return
 	var planet_center := stellar_body.node.global_transform.origin
 	var space_state : PhysicsDirectSpaceState3D = ship.get_world_3d().direct_space_state
 	var ship_trans : Transform3D = ship.global_transform

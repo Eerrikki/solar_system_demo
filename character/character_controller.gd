@@ -4,8 +4,6 @@ const StellarBody = preload("../solar_system/stellar_body.gd")
 const Ship = preload("../ship/ship.gd")
 const Util = preload("../util/util.gd")
 const CollisionLayers = preload("../collision_layers.gd")
-# TODO This is very close to Godot's CharacterBody3D. Introduce prefixes?
-# It could be confusing to not realize this is actually from the project and not Godot
 const CharacterBody = preload("res://addons/zylann.3d_basics/character/character.gd")
 const SplitChunkRigidBodyComponent = preload("../solar_system/split_chunk_rigidbody_component.gd")
 const CharacterAudio = preload("./character_audio.gd")
@@ -21,7 +19,6 @@ const JUMP_SPEED = 8.0
 
 @onready var _head : Node3D = get_node("../Head")
 @onready var _visual_root : Node3D = get_node("../Visual")
-#@onready var _visual_animated : Mannequiny = get_node("../Visual/Mannequiny")
 @onready var _visual_head : Node3D = get_node("../Visual/Head")
 @onready var _flashlight : SpotLight3D = get_node("../Visual/FlashLight")
 @onready var _audio : CharacterAudio = get_node("../Audio")
@@ -64,7 +61,6 @@ func _physics_process(delta):
 func _process_undig():
 	var solar_system := _get_solar_system()
 	if solar_system == null:
-		# In testing scene?
 		return
 	var volume := solar_system.get_reference_stellar_body().volume
 	var vt : VoxelToolLodTerrain = volume.get_voxel_tool()
@@ -123,7 +119,6 @@ func _process_actions():
 				var vt : VoxelToolLodTerrain = volume.get_voxel_tool()
 				var pos := volume.get_global_transform().affine_inverse() * hit_position
 				var sphere_size := 3.5
-				#pos -= front * (sphere_size * 0.9)
 				vt.channel = VoxelBuffer.CHANNEL_SDF
 				vt.mode = VoxelTool.MODE_REMOVE
 				vt.do_sphere(pos, sphere_size)
@@ -212,53 +207,43 @@ func _enter_ship(ship: Ship):
 	_get_body().queue_free()
 
 
-func _set_visual_state(state: Mannequiny.States):
-	# TODO Temporarily removed Mannequinny, it did not port well to Godot4
-	pass
-#	if _visual_state != state:
-#		_visual_state = state
-#		_visual_animated.transition_to(_visual_state)
-
-
 func _process(delta: float):
 	var character_body := _get_body()
 	var gtrans := character_body.global_transform
 
-	# We want to rotate only along local Y
-	var plane := Plane(_visual_root.global_transform.basis.y, 0)
+	# Get the head's forward direction
 	var head_basis := _head.global_transform.basis
-	var forward := plane.project(-head_basis.z)
-	if forward == Vector3():
-		forward = Vector3(0, 1, 0)
-	var up := gtrans.basis.y
+	var head_forward := -head_basis.z
+
+	# Project the head's forward direction onto the character's local XZ plane
+	var character_up := gtrans.basis.y
+	var plane := Plane(character_up, 0)
+	var projected_forward := plane.project(head_forward)
+
+	# Ensure projected_forward is not zero
+	if projected_forward.length_squared() < 0.001:
+		projected_forward = gtrans.basis.z  # Use character's current forward as fallback
+
+	projected_forward = projected_forward.normalized()
+
+	# Construct the new basis for the visual root
+	var right := projected_forward.cross(character_up).normalized()
+	var forward := character_up.cross(right).normalized()
+	var new_basis := Basis(right, character_up, -forward)
+
+	# Visual can be offset
+	var visual_origin := _visual_root.global_transform.origin
+
+	var old_root_basis := _visual_root.global_transform.basis.orthonormalized()
 	
-	# Visual can be offset.
-	# We need global transfotm tho cuz look_at wants a global position
-	gtrans.origin = _visual_root.global_transform.origin
+	# Interpolate between old and new basis
+	var interpolated_basis := old_root_basis.slerp(new_basis, delta * 8.0)
+
+	# Apply the new transform
+	_visual_root.global_transform = Transform3D(interpolated_basis, visual_origin)
 	
-	var old_root_basis = _visual_root.transform.basis.orthonormalized()
-	_visual_root.look_at(gtrans.origin + forward, up)
-	_visual_root.transform.basis = old_root_basis.slerp(_visual_root.transform.basis, delta * 8.0)
-	
-	# TODO Temporarily removed Mannequinny, it did not port well to Godot4
-	#_process_visual_animated(forward, character_body)
-	
+	# Keep the head looking at the mouse target
 	_visual_head.global_transform.basis = head_basis
-
-
-#func _process_visual_animated(forward: Vector3, character_body: CharacterBody3D):
-#	_visual_animated.set_move_direction(forward)
-#
-#	var state = Mannequiny.States.RUN
-#	if _last_motor.length_squared() > 0.0:
-#		_visual_animated.set_is_moving(true)
-#		state = Mannequiny.States.RUN
-#	else:
-#		_visual_animated.set_is_moving(false)
-#		state = Mannequiny.States.IDLE
-#	if not character_body.is_landed():
-#		state = Mannequiny.States.AIR
-#	_set_visual_state(state)
 
 
 func _get_solar_system() -> SolarSystem:

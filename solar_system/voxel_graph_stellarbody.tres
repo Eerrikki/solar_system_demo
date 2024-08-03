@@ -1,0 +1,26 @@
+[gd_resource type="VoxelGeneratorGraph" format=3 uid="uid://dw8gna8b2l7lb"]
+
+[resource]
+graph_data = {
+"connections": [[61, 0, 1, 0]],
+"nodes": {
+"1": {
+"auto_connect": true,
+"gui_position": Vector2(1860, 200),
+"type": "OutputSDF"
+},
+"61": {
+"auto_connect": true,
+"factor": 50.0,
+"gui_position": Vector2(1600, 200),
+"image": null,
+"name": &"sphere",
+"radius": 1600.0,
+"type": "SdfSphereHeightmap",
+"x": 0.0,
+"y": 0.0,
+"z": 0.0
+}
+},
+"version": 2
+}

@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://2t4g6hw23ugq"
+path="res://.godot/imported/8k_jupiter.jpg-57ec05e068c058e7b273e7ca13bbfbda.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/8k_jupiter.jpg"
+dest_files=["res://.godot/imported/8k_jupiter.jpg-57ec05e068c058e7b273e7ca13bbfbda.image"]
+
+[params]
+

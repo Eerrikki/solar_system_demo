@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://co8guas32wtj8"
+path="res://.godot/imported/8k_mercury.jpg-46ff7a859b683cff87351d5297ac0d97.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/8k_mercury.jpg"
+dest_files=["res://.godot/imported/8k_mercury.jpg-46ff7a859b683cff87351d5297ac0d97.image"]
+
+[params]
+

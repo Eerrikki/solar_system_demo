@@ -1,8 +1,8 @@
 [gd_scene load_steps=12 format=3 uid="uid://drwudkqcpqr7u"]
 
-[ext_resource type="Material" uid="uid://cp754ky7maqj2" path="res://solar_system/materials/planet_material_grassy.tres" id="1"]
+[ext_resource type="VoxelGeneratorGraph" uid="uid://dw8gna8b2l7lb" path="res://solar_system/voxel_graph_stellarbody.tres" id="1_yne3w"]
+[ext_resource type="Material" uid="uid://dnb1x6ck6u6rd" path="res://solar_system/materials/planet_material_heightmap.tres" id="2_3orlq"]
 [ext_resource type="PackedScene" uid="uid://c36velgas3n3k" path="res://addons/zylann.atmosphere/planet_atmosphere.tscn" id="3_j5ksx"]
-[ext_resource type="VoxelGeneratorGraph" uid="uid://b4umpxnew5cgx" path="res://solar_system/voxel_graph_planet_v4.tres" id="4"]
 [ext_resource type="Shader" path="res://addons/zylann.atmosphere/shaders/planet_atmosphere_v1_clouds.gdshader" id="4_3o5ts"]
 [ext_resource type="NoiseTexture3D" uid="uid://cudqtkcf6wrj2" path="res://solar_system/atmosphere/noise_texture_3d.res" id="5_mft80"]
 [ext_resource type="Cubemap" uid="uid://ghi3h7wjp2ep" path="res://solar_system/atmosphere/cloud_coverage_mars.tres" id="6_ei3xl"]
@@ -93,15 +93,17 @@ height = 400.0
 [node name="Node" type="Node"]
 
 [node name="Planet" type="VoxelLodTerrain" parent="."]
-generator = ExtResource("4")
+generator = ExtResource("1_yne3w")
 mesher = SubResource("1")
 view_distance = 2048
 voxel_bounds = AABB(-2048, -2048, -2048, 4096, 4096, 4096)
 lod_count = 7
-material = ExtResource("1")
+material = ExtResource("2_3orlq")
+full_load_mode_enabled = true
+threaded_update_enabled = true
 
 [node name="DirectionalLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.170038, -0.0201907, 0.985231, 0, 0.99979, 0.020489, -0.985438, -0.0034839, 0.170002, 3502.13, 538.943, 0)
+transform = Transform3D(0.170038, -0.0201907, 0.985231, 0, 0.99979, 0.0204891, -0.985438, -0.00348392, 0.170002, 2260.86, 538.943, 0)
 shadow_enabled = true
 directional_shadow_max_distance = 2000.0
 
@@ -110,14 +112,16 @@ environment = SubResource("2")
 
 [node name="Spatial" type="Marker3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1024, 31.31, 0)
+visible = false
 
 [node name="MeshInstance" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 739.203)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2488.3, 0, 739.203)
 visible = false
 material_override = SubResource("4")
 mesh = SubResource("5")
 
 [node name="PlanetAthmosphere" parent="." instance=ExtResource("3_j5ksx")]
+visible = false
 planet_radius = 1600.0
 atmosphere_height = 320.0
 sun_path = NodePath("../DirectionalLight")

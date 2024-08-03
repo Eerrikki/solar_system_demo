@@ -117,8 +117,8 @@ func _physics_process(delta: float):
 		if _reference_body_id == 0:
 			for i in len(_bodies):
 				var body : StellarBody = _bodies[i]
-				if body.type == StellarBody.TYPE_SUN:
-					# Ignore sun, no point landing there
+				if body.type == StellarBody.TYPE_DEEP_SPACE:
+					# Ignore deep space
 					continue
 				var body_pos := body.node.global_transform.origin
 				var d := body_pos.distance_to(_ship.global_transform.origin)
@@ -347,16 +347,54 @@ func _compute_absolute_body_transform(body: StellarBody) -> Transform3D:
 	if body.parent_id == -1:
 		# Sun
 		return Transform3D()
+	
 	var parent_transform := Transform3D()
 	if body.parent_id != -1:
 		var parent_body := _bodies[body.parent_id]
 		parent_transform = _compute_absolute_body_transform(parent_body)
+	
+	# Real-world data for planets in our solar system
+	const ORBIT_DATA := {
+		"Mercury": {"semi_major_axis": 57.909227, "eccentricity": 0.2056, "inclination": 7.00487, "longitude_of_ascending_node": 48.331369, "argument_of_periapsis": 29.124902},
+		"Venus": {"semi_major_axis": 108.208926, "eccentricity": 0.0068, "inclination": 3.39471, "longitude_of_ascending_node": 76.679362, "argument_of_periapsis": 55.186881},
+		"Earth": {"semi_major_axis": 149.597887, "eccentricity": 0.0167, "inclination": 0.00005, "longitude_of_ascending_node": 0, "argument_of_periapsis": 102.937681},
+		"Mars": {"semi_major_axis": 227.939166, "eccentricity": 0.0934, "inclination": 1.84972, "longitude_of_ascending_node": 49.555241, "argument_of_periapsis": 286.467582},
+		"Jupiter": {"semi_major_axis": 778.299026, "eccentricity": 0.0484, "inclination": 1.3053, "longitude_of_ascending_node": 100.464571, "argument_of_periapsis": 275.740378},
+		"Saturn": {"semi_major_axis": 1426.666684, "eccentricity": 0.0539, "inclination": 2.48446, "longitude_of_ascending_node": 113.640856, "argument_of_periapsis": 339.393811},
+		"Uranus": {"semi_major_axis": 2870.97219, "eccentricity": 0.0472, "inclination": 0.76986, "longitude_of_ascending_node": 73.98759, "argument_of_periapsis": 98.764558},
+		"Neptune": {"semi_major_axis": 4498.25293, "eccentricity": 0.0086, "inclination": 1.7673, "longitude_of_ascending_node": 130.790235, "argument_of_periapsis": 274.244502},
+		"Pluto": {"semi_major_axis": 5906.37627, "eccentricity": 0.2488, "inclination": 17.142, "longitude_of_ascending_node": 110.253, "argument_of_periapsis": 224.656}
+	}
+	
 	var orbit_angle := body.orbit_revolution_progress * TAU
-	# TODO Elliptic orbits
-	var pos := Vector3(cos(orbit_angle), 0, sin(orbit_angle)) * body.distance_to_parent
+	var pos: Vector3
+	
+	if body.name in ORBIT_DATA:
+		var planet_data: Dictionary = ORBIT_DATA[body.name]
+		var semi_major_axis: float = planet_data.semi_major_axis * body.distance_to_parent / planet_data.semi_major_axis
+		var eccentricity: float = planet_data.eccentricity
+		var inclination := deg_to_rad(planet_data.inclination)
+		var longitude_of_ascending_node := deg_to_rad(planet_data.longitude_of_ascending_node)
+		var argument_of_periapsis := deg_to_rad(planet_data.argument_of_periapsis)
+		
+		# Calculate position using Kepler's laws
+		var radius: float = semi_major_axis * (1 - eccentricity * eccentricity) / (1 + eccentricity * cos(orbit_angle - argument_of_periapsis))
+		pos = Vector3(
+			radius * cos(orbit_angle),
+			radius * sin(orbit_angle) * sin(inclination),
+			radius * sin(orbit_angle) * cos(inclination)
+		)
+		
+		pos = pos.rotated(Vector3.BACK, longitude_of_ascending_node)
+	else:
+		# For moons or other bodies not in ORBIT_DATA, use simple calculation
+		pos = Vector3(cos(orbit_angle), 0, sin(orbit_angle)) * body.distance_to_parent
+	
 	pos = pos.rotated(Vector3(0, 0, 1), body.orbit_tilt)
+	
 	var self_angle := body.self_revolution_progress * TAU
 	var basis := Basis.from_euler(Vector3(0, self_angle, body.self_tilt))
+	
 	var local_transform := Transform3D(basis, pos)
 	return parent_transform * local_transform
 

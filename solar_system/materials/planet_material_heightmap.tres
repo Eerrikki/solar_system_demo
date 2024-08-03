@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dnb1x6ck6u6rd"]
+
+[ext_resource type="Shader" path="res://solar_system/materials/stellarbody_hightmap_texture.gdshader" id="1_tqb3i"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_tqb3i")

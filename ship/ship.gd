@@ -15,8 +15,8 @@ const STATE_FLYING = 1
 
 @export var linear_acceleration := 10.0
 @export var angular_acceleration := 1000.0
-@export var speed_cap_on_planet := 40.0
-@export var speed_cap_in_space := 400.0
+@export var speed_cap_on_planet := 400.0
+@export var speed_cap_in_space := 4000.0
 
 @onready var _visual_root : Node3D = $Visual/VisualRoot
 @onready var _controller : ShipController = $Controller
@@ -61,7 +61,7 @@ var _ref_change_info : ReferenceChangeInfo
 var _was_superspeed := false
 var _last_contacts_count := 0
 
-var _speed_cap_in_space_superspeed_multiplier := 10.0
+var _speed_cap_in_space_superspeed_multiplier := 10.0 * 1000
 var _linear_acceleration_superspeed_multiplier := 15.0
 
 
@@ -171,7 +171,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 	var speed_cap_in_space_mod := speed_cap_in_space
 	
 	var superspeed := false
-	if _superspeed_cmd and stellar_body.type == StellarBody.TYPE_SUN:
+	if _superspeed_cmd: #and stellar_body.type == StellarBody.TYPE_MAIN_SEQUENCE_STAR:
 		speed_cap_in_space_mod *= _speed_cap_in_space_superspeed_multiplier
 		linear_acceleration_mod *= _linear_acceleration_superspeed_multiplier
 		superspeed = true
@@ -200,7 +200,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D):
 	#state.apply_torque_impulse(-state.angular_velocity * 0.01)
 
 	# Planet influence
-	if stellar_body.type != StellarBody.TYPE_SUN:
+	if stellar_body.type != StellarBody.TYPE_MAIN_SEQUENCE_STAR:
 		var pull_center := stellar_body.node.global_transform.origin
 		var distance_to_core := pull_center.distance_to(gtrans.origin)
 

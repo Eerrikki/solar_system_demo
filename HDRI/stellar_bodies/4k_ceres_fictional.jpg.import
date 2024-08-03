@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://brid2osqgkxy1"
+path="res://.godot/imported/4k_ceres_fictional.jpg-5b8c46f50a74a4552062ce5d3e7904d9.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/4k_ceres_fictional.jpg"
+dest_files=["res://.godot/imported/4k_ceres_fictional.jpg-5b8c46f50a74a4552062ce5d3e7904d9.image"]
+
+[params]
+

@@ -3,9 +3,25 @@ const PlanetAtmosphere = preload("res://addons/zylann.atmosphere/planet_atmosphe
 const Settings = preload("res://settings.gd")
 const Waypoint = preload("res://waypoints/waypoint.gd")
 
-const TYPE_SUN = 0
-const TYPE_ROCKY = 1
-const TYPE_GAS = 2
+const TYPE_MAIN_SEQUENCE_STAR = 0  # e.g. Sun
+const TYPE_RED_GIANT_STAR = 1  # e.g. Betelgeuse
+const TYPE_WHITE_DWARF_STAR = 2  # e.g. Sirius B
+const TYPE_NEUTRON_STAR = 3  # e.g. PSR J0348+0432
+const TYPE_BLACK_HOLE = 4  # e.g. Cygnus X-1
+
+const TYPE_TERRESTRIAL_PLANET = 5  # e.g. Mercury, Mars, Earth, Kepler-452b
+const TYPE_GAS_GIANT = 6  # e.g. Jupiter, Saturn, Kepler-11b
+const TYPE_ICE_GIANT = 7  # e.g. Uranus, Neptune
+
+const TYPE_DWARF_PLANET = 8  # e.g. Pluto, Eris
+const TYPE_ASTEROID = 9  # e.g. Ceres, Vesta
+const TYPE_COMET = 10  # e.g. Halley's Comet
+const TYPE_KUIPER_BELT_OBJECT = 11  # e.g. Quaoar, Makemake
+const TYPE_OORT_CLOUD_OBJECT = 12  # e.g. Sedna
+
+const TYPE_MOON = 13  # e.g. Moon, Io, Europa
+const TYPE_ASTEROID_BELT = 14  # e.g. asteroid belt between Mars and Jupiter
+const TYPE_DEEP_SPACE = 15  # e.g. not close to any stellar bodies
 
 const ATMOSPHERE_DISABLED = 0
 const ATMOSPHERE_MONOCHROME = 1
@@ -13,7 +29,7 @@ const ATMOSPHERE_WITH_SCATTERING = 2
 
 # Static values
 var name := ""
-var type := TYPE_SUN
+var type := TYPE_DEEP_SPACE
 var parent_id := -1
 var radius := 0.0
 var distance_to_parent := 0.0

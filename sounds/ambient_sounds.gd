@@ -22,7 +22,7 @@ func _process(delta: float):
 	var day_factor := 1.0
 	var planet := _solar_system.get_reference_stellar_body()
 	
-	if planet.type != StellarBody.TYPE_SUN:
+	if planet.type != StellarBody.TYPE_MAIN_SEQUENCE_STAR:
 		var camera := get_viewport().get_camera_3d()
 		var planet_core_position := planet.node.global_transform.origin
 		var camera_position := camera.global_transform.origin
@@ -49,7 +49,7 @@ func _process(delta: float):
 
 func _on_GameWorld_reference_body_changed(info: ReferenceChangeInfo):
 	var planet := _solar_system.get_reference_stellar_body()
-	if planet.type == StellarBody.TYPE_SUN:
+	if planet.type == StellarBody.TYPE_DEEP_SPACE:
 		_planet_day_player.stop()
 		_planet_night_player.stop()
 	else:

@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://bcelhogxhpwuj"
+path="res://.godot/imported/2k_neptune.jpg-9be4b54f30cd8a7b1f3078438c33c41f.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/2k_neptune.jpg"
+dest_files=["res://.godot/imported/2k_neptune.jpg-9be4b54f30cd8a7b1f3078438c33c41f.image"]
+
+[params]
+

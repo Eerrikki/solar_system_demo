@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://bpuchsdv6evh1"
+path="res://.godot/imported/8k_sun.jpg-db5c6838daf0c9351bb85f0e227dc3c6.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/8k_sun.jpg"
+dest_files=["res://.godot/imported/8k_sun.jpg-db5c6838daf0c9351bb85f0e227dc3c6.image"]
+
+[params]
+

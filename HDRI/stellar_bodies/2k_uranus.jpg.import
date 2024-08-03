@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://bgydbcbfj8lp8"
+path="res://.godot/imported/2k_uranus.jpg-c96448f55acb6fd0a944e22a3e2baf90.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/2k_uranus.jpg"
+dest_files=["res://.godot/imported/2k_uranus.jpg-c96448f55acb6fd0a944e22a3e2baf90.image"]
+
+[params]
+

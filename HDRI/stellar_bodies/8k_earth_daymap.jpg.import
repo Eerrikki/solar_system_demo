@@ -1,0 +1,14 @@
+[remap]
+
+importer="image"
+type="Image"
+uid="uid://c46250be8ygr2"
+path="res://.godot/imported/8k_earth_daymap.jpg-d147d675be653367e4528c1f69d45133.image"
+
+[deps]
+
+source_file="res://HDRI/stellar_bodies/8k_earth_daymap.jpg"
+dest_files=["res://.godot/imported/8k_earth_daymap.jpg-d147d675be653367e4528c1f69d45133.image"]
+
+[params]
+

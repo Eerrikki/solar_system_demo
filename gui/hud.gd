@@ -13,6 +13,24 @@ const Util = preload("../util/util.gd")
 var _target_planet_screen_pos := Vector2()
 var _pointed_body : StellarBody = null
 
+var stellar_body_type_names = {
+	StellarBody.TYPE_MAIN_SEQUENCE_STAR: "Main Sequence Star",
+	StellarBody.TYPE_RED_GIANT_STAR: "Red Giant Star",
+	StellarBody.TYPE_WHITE_DWARF_STAR: "White Dwarf Star",
+	StellarBody.TYPE_NEUTRON_STAR: "Neutron Star",
+	StellarBody.TYPE_BLACK_HOLE: "Black Hole",
+	StellarBody.TYPE_TERRESTRIAL_PLANET: "Terrestrial Planet",
+	StellarBody.TYPE_GAS_GIANT: "Gas Giant",
+	StellarBody.TYPE_ICE_GIANT: "Ice Giant",
+	StellarBody.TYPE_DWARF_PLANET: "Dwarf Planet",
+	StellarBody.TYPE_ASTEROID: "Asteroid",
+	StellarBody.TYPE_COMET: "Comet",
+	StellarBody.TYPE_KUIPER_BELT_OBJECT: "Kuiper Belt Object",
+	StellarBody.TYPE_OORT_CLOUD_OBJECT: "Oort Cloud Object",
+	StellarBody.TYPE_MOON: "Moon",
+	StellarBody.TYPE_ASTEROID_BELT: "Asteroid Belt",
+	StellarBody.TYPE_DEEP_SPACE: "Deep Space"
+}
 
 func _ready():
 	_waypoint_hud.set_solar_system(_solar_system)
@@ -67,12 +85,7 @@ func _process(_delta: float):
 
 
 func _get_stellar_body_type_name(body: StellarBody) -> String:
-	if body.type == StellarBody.TYPE_SUN:
-		return "Star"
-	var parent_body : StellarBody = _solar_system.get_stellar_body(body.parent_id)
-	if parent_body.type != StellarBody.TYPE_SUN:
-		return "Moon"
-	return "Planet"
+	return stellar_body_type_names.get(body.type, "Unknown")
 
 
 func _find_pointed_planet(camera: Camera3D) -> StellarBody:

@@ -43,6 +43,7 @@ func _ready():
 	if get_parent().has_signal("reference_body_changed"):
 		get_parent().reference_body_changed.connect(_on_solar_system_reference_body_changed)
 
+	far = 10000000
 
 func _on_solar_system_reference_body_changed(info: ReferenceChangeInfo):
 	_last_ref_change_info = info
@@ -114,38 +115,47 @@ func _physics_process(delta: float):
 	
 	# Get ideal transform
 	var tt := _get_target_transform()
-	#print("CAM: ", tt.origin, "       real: ", _target.global_transform.origin)
 	var ct := _get_ideal_transform(tt)
 	transform = ct
-	var up := ct.basis.y
-	look_at(tt.origin + target_height_modifier * tt.basis.y + side_offset * tt.basis.x, up)
-	var ideal_trans := transform
-	var trans := ideal_trans
 	
-	# Collision avoidance
-	var dss := get_world_3d().direct_space_state
-	var ignored := [_target_rigidbody.get_rid()] if _target_rigidbody != null else []
-	var ray_query := PhysicsRayQueryParameters3D.new()
-	ray_query.from = tt.origin
-	ray_query.to = ideal_trans.origin
-	ray_query.exclude = ignored
-	var hit := dss.intersect_ray(ray_query)
-	if not hit.is_empty():
-		#var hit_normal = hit.normal
-		trans.origin = hit.position + 0.3 * hit.normal
+	# Calculate the look-at direction
+	var target_pos := tt.origin + target_height_modifier * tt.basis.y + side_offset * tt.basis.x
+	var look_dir := (target_pos - ct.origin).normalized()
 	
-	# Add latency (using interpolation)
-#	var q1 = Quat(prev_trans.basis)
-#	var q2 = Quat(trans.basis)
-#	var q = q1.slerp(q2, 20.0 * delta)
-#	trans.basis = Basis(q)
-	trans = prev_trans.interpolate_with(trans, 25.0 * delta)
+	var ideal_trans: Transform3D
+	var trans: Transform3D
 	
+	# Only proceed if look_dir is not zero and significant change has occurred
+	if look_dir.length_squared() > 0.001 and (target_pos - _prev_target_pos).length_squared() > 0.01:
+		var up := ct.basis.y.normalized()
+		var right := look_dir.cross(up).normalized()
+		up = right.cross(look_dir).normalized()
+		
+		var new_basis := Basis(right, up, -look_dir).orthonormalized()
+		ideal_trans = Transform3D(new_basis, ct.origin)
+		
+		# Collision avoidance
+		var dss := get_world_3d().direct_space_state
+		var ignored := [_target_rigidbody.get_rid()] if _target_rigidbody != null else []
+		var ray_query := PhysicsRayQueryParameters3D.new()
+		ray_query.from = tt.origin
+		ray_query.to = ideal_trans.origin
+		ray_query.exclude = ignored
+		var hit := dss.intersect_ray(ray_query)
+		if not hit.is_empty():
+			ideal_trans.origin = hit.position + 0.3 * hit.normal
+		
+		# Smooth interpolation
+		trans = prev_trans.interpolate_with(ideal_trans, min(1.0, 10.0 * delta))
+	else:
+		# If no significant change, maintain current transform
+		trans = prev_trans
+
 	# Assign final transform
 	transform = trans
-	
+
 	_prev_target_pos = tt.origin
-	
+
 	if _wait_for_fucking_physics > 0:
 		_wait_for_fucking_physics -= 1
 		if _wait_for_fucking_physics == 0:
