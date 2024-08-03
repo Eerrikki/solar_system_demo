@@ -131,7 +131,7 @@ static func create_solar_system_data(settings: Settings) -> Array[StellarBody]:
 	planet.type = StellarBody.TYPE_MOON
 	planet.radius = 1737.4
 	planet.parent_id = earth_id
-	planet.distance_to_parent = 384400.0 * 10
+	planet.distance_to_parent = 384400.0 * 100
 	planet.self_revolution_time = 27.3217 * 24.0 * 60.0 * 60.0
 	planet.orbit_revolution_time = 27.3217 * 24.0 * 60.0 * 60.0
 	planet.atmosphere_mode = StellarBody.ATMOSPHERE_DISABLED
@@ -365,98 +365,6 @@ static func image_to_texture(image: Image) -> Texture2D:
 		print("Error: Failed to create texture from image")
 	return texture
 
-#static func _create_stellar_body(body: StellarBody, root: Node3D, settings: Settings):
-	#var mat : ShaderMaterial
-	#var generator : VoxelGeneratorGraph = VOXEL_GRAPH_STELLARBODY.duplicate(true)
-	#var graph : VoxelGraphFunction = generator.get_main_function()
-	#var sphere_node_id := graph.find_node_by_name("sphere")
-	#var image_param_id := 0
-	#var radius_param_id := 1
-#
-	#if body.name == "Earth":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#var texture = image_to_texture(_8K_EARTH_DAYMAP)
-		#mat.set_shader_parameter("texture_map", texture)
-		#print("Resource type: ", _8K_EARTH_DAYMAP.get_class())
-		#print("Texture loaded: ", _8K_EARTH_DAYMAP)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_EARTH_DAYMAP)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Mercur":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _8K_MERCURY)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_MERCURY)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Mars":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _8K_MARS)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_MARS)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Venus":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _8K_VENUS_SURFACE)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_VENUS_SURFACE)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Uranus":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _2K_URANUS)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _2K_URANUS)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Saturn":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _8K_SATURN)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_SATURN)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Jupiter":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _8K_JUPITER)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_JUPITER)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Neptun":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _2K_NEPTUNE)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _2K_NEPTUNE)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Moon":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _8K_MOON)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_MOON)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#if body.name == "Sun":
-		#mat = PLANET_MATERIAL_HEIGHTMAP.duplicate()
-		#mat.set_shader_parameter(&"texture_map", _8K_SUN)
-#
-		#graph.set_node_param(sphere_node_id, image_param_id, _8K_SUN)
-		#graph.set_node_param(sphere_node_id, radius_param_id, body.radius)
-		##generator.compile()
-#
-	#generator.compile()
 static func _create_stellar_body(body: StellarBody, root: Node3D, settings: Settings):
 	var mat : ShaderMaterial
 	var generator : VoxelGeneratorGraph = VOXEL_GRAPH_STELLARBODY.duplicate(true)
@@ -587,7 +495,7 @@ static func _create_stellar_body(body: StellarBody, root: Node3D, settings: Sett
 	body.volume = volume
 	root.add_child(volume)
 
-	_configure_instancing_for_stellar_body(body, volume)
+	#_configure_instancing_for_stellar_body(body, volume)
 
 
 static func _configure_instancing_for_stellar_body(body: StellarBody, volume: VoxelLodTerrain):
