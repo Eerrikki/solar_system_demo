@@ -15,7 +15,7 @@ const STATE_FLYING = 1
 
 @export var linear_acceleration := 10.0
 @export var angular_acceleration := 1000.0
-@export var speed_cap_on_planet := 400.0
+@export var speed_cap_on_planet := 40.0
 @export var speed_cap_in_space := 4000.0
 
 @onready var _visual_root : Node3D = $Visual/VisualRoot
@@ -61,8 +61,8 @@ var _ref_change_info : ReferenceChangeInfo
 var _was_superspeed := false
 var _last_contacts_count := 0
 
-var _speed_cap_in_space_superspeed_multiplier := 10.0 * 1000
-var _linear_acceleration_superspeed_multiplier := 15.0
+var _speed_cap_in_space_superspeed_multiplier := 10.0 * 100
+var _linear_acceleration_superspeed_multiplier := 15.0 * 100
 
 
 func _ready():
